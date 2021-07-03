@@ -1,0 +1,48 @@
+﻿using RestApiModeloDDD.App.Dtos;
+using RestApiModeloDDD.App.Interfaces;
+using RestApiModeloDDD.Domain.Core.Interfaces.Services;
+using System.Collections.Generic;
+using RestApiModeloDDD.App.Interfaces.mapper;
+
+namespace RestApiModeloDDD.App
+{
+    public class ApplicationServiceCliente : IApplicationServiceCliente
+    {
+        private readonly IServiceCliente _serviceCliente;
+        private readonly IMapperCliente _mapperCliente;
+        public ApplicationServiceCliente(IServiceCliente serviceCliente, IMapperCliente mapperCliente)
+        {
+            _serviceCliente = serviceCliente;
+            _mapperCliente = mapperCliente;
+        }
+        public void Add(ClienteDTO clienteDto)
+        {
+            var cliente = _mapperCliente.MapperDtoToEntity(clienteDto);
+            _serviceCliente.Add(cliente);
+        }
+
+        public IEnumerable<ClienteDTO> GetAll()
+        {
+            var clientes = _serviceCliente.GetAll();
+            return _mapperCliente.MapperListClienteDto(clientes);
+        }
+
+        public ClienteDTO GetById(int id)
+        {
+            var cliente = _serviceCliente.GetById((id));
+            return _mapperCliente.MapperEntityToDto(cliente);
+        }
+
+        public void Remove(ClienteDTO clienteDto)
+        {
+            var cliente = _mapperCliente.MapperDtoToEntity(clienteDto);
+            _serviceCliente.Remove(cliente);
+        }
+
+        public void Update(ClienteDTO clienteDto)
+        {
+            var cliente = _mapperCliente.MapperDtoToEntity(clienteDto);
+            _serviceCliente.Update(cliente);
+        }
+    }
+}
